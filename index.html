@@ -9,7 +9,7 @@
     :root { --red:#e50914; --bg:#141414; --panel:#202020; --muted:#b3b3b3; }
     * { box-sizing:border-box; }
     body { margin:0; background:var(--bg); color:#fff; font-family:Arial,Helvetica,sans-serif; }
-    button, input { font:inherit; }
+    button, input, a.btn { font:inherit; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
     button { cursor:pointer; }
     .topbar { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:28px; padding:16px 4.5%; background:rgba(12,12,12,.96); }
     .brand { color:var(--red); font-size:clamp(21px,3vw,30px); font-weight:900; letter-spacing:-1.2px; white-space:nowrap; }
@@ -23,7 +23,7 @@
     .eyebrow { color:#ddd; font-size:12px; font-weight:bold; letter-spacing:3px; }
     h1 { margin:12px 0; font-size:clamp(38px,6vw,66px); line-height:.98; }
     .hero p { max-width:520px; color:#ddd; line-height:1.6; font-size:15px; }
-    .actions { display:flex; gap:12px; margin-top:22px; }
+    .actions { display:flex; gap:12px; margin-top:22px; flex-wrap:wrap; }
     .btn { border:0; border-radius:4px; padding:12px 20px; font-weight:bold; }
     .btn-primary { background:#fff; color:#111; }
     .btn-primary:hover { background:#ddd; }
@@ -57,6 +57,7 @@
     .modal-body { padding:20px 24px 25px; }
     .modal-body h2 { margin:0 0 8px; }
     .modal-body p { color:#ccc; line-height:1.6; }
+    .modal-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
     .close { float:right; border:0; color:white; background:#333; border-radius:50%; width:34px; height:34px; font-size:20px; }
     .notice { color:#aaa; font-size:12px; margin-top:14px; }
     @media(max-width:650px) {
@@ -87,7 +88,7 @@
     <div class="hero-content">
       <div class="eyebrow">PRASHANT FLIX ORIGINAL EXPERIENCE</div>
       <h1>Stories worth<br>staying in for.</h1>
-      <p>Discover movies and series in one place. Explore the sample catalogue, search titles, and open each title for more information.</p>
+      <p>Discover movies and series in one place. Search titles, stream directly in the modal, or download available videos.</p>
       <div class="actions">
         <button class="btn btn-primary" id="exploreBtn">▶ Explore titles</button>
         <button class="btn btn-secondary" id="aboutBtn">ⓘ About</button>
@@ -115,8 +116,7 @@
 
   <footer id="my-list">
     <strong>PRASHANT FLIX</strong><br>
-    Demo website starter. The titles shown are sample catalogue entries, not a real streaming library.
-    Add only videos and artwork you own or are licensed to distribute.
+    Demo streaming & media catalogue starter. Add only videos and artwork you own or are licensed to distribute.
   </footer>
 
   <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -130,15 +130,17 @@
         <h2 id="modalTitle">Title</h2>
         <div class="meta" id="modalMeta"></div>
         <p id="modalDescription"></p>
-        <button class="btn btn-primary" id="watchButton">▶ Watch</button>
-        <div class="notice" id="watchNotice">Click Watch to play the connected video source.</div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="watchButton">▶ Watch</button>
+          <a class="btn btn-secondary" id="downloadButton" href="#" download>⬇ Download</a>
+        </div>
+        <div class="notice" id="watchNotice">Click Watch to play or Download to save the video file.</div>
       </div>
     </div>
   </div>
 
   <script>
-    // Replace videoUrl values below with your own or licensed video stream URLs.
-    const titles = [
+    const fallbackTitles = [
       {
         id: 1,
         name: "Crimson Horizon",
@@ -160,53 +162,10 @@
         image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
         description: "A close-knit group faces difficult choices and unexpected truths."
-      },
-      {
-        id: 3,
-        name: "Shadow Protocol",
-        type: "Movie",
-        genre: "Action",
-        year: 2024,
-        rating: "U/A",
-        image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-        description: "One secret mission. One chance to put things right."
-      },
-      {
-        id: 4,
-        name: "City of Echoes",
-        type: "Series",
-        genre: "Drama",
-        year: 2024,
-        rating: "U",
-        image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoy.mp4",
-        description: "In a city full of stories, every street hides a mystery."
-      },
-      {
-        id: 5,
-        name: "Beyond the Summit",
-        type: "Movie",
-        genre: "Drama",
-        year: 2023,
-        rating: "U",
-        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-        description: "An inspiring story about courage, friendship, and new beginnings."
-      },
-      {
-        id: 6,
-        name: "Night Shift",
-        type: "Series",
-        genre: "Action",
-        year: 2025,
-        rating: "U/A",
-        image: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-        description: "When the city sleeps, a small team keeps watch."
       }
     ];
 
+    let titles = [];
     const catalogue = document.getElementById("catalogue");
     const searchInput = document.getElementById("searchInput");
     const emptyMessage = document.getElementById("emptyMessage");
@@ -215,6 +174,7 @@
     const playerWrap = document.getElementById("playerWrap");
     const videoPlayer = document.getElementById("videoPlayer");
     const watchButton = document.getElementById("watchButton");
+    const downloadButton = document.getElementById("downloadButton");
     const watchNotice = document.getElementById("watchNotice");
 
     let activeFilter = "All";
@@ -267,6 +227,10 @@
       watchButton.textContent = "▶ Watch";
     }
 
+    function slugifyFilename(name) {
+      return `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "video"}.mp4`;
+    }
+
     function openDetails(id) {
       const item = titles.find(title => title.id === id);
       if (!item) return;
@@ -277,9 +241,21 @@
       document.getElementById("modalMeta").textContent = `${item.year} · ${item.type} · ${item.genre} · ${item.rating}`;
       document.getElementById("modalDescription").textContent = item.description;
       modalBanner.style.backgroundImage = `url("${item.image}")`;
-      watchNotice.textContent = item.videoUrl
-        ? "Ready to play connected video source."
-        : "No videoUrl connected for this title yet.";
+
+      if (item.videoUrl) {
+        downloadButton.href = item.videoUrl;
+        downloadButton.setAttribute("download", slugifyFilename(item.name));
+        downloadButton.setAttribute("target", "_blank");
+        downloadButton.style.pointerEvents = "auto";
+        downloadButton.style.opacity = "1";
+        watchNotice.textContent = "Ready to stream or download.";
+      } else {
+        downloadButton.href = "#";
+        downloadButton.removeAttribute("download");
+        downloadButton.style.pointerEvents = "none";
+        downloadButton.style.opacity = "0.5";
+        watchNotice.textContent = "No videoUrl connected for this title yet.";
+      }
 
       document.getElementById("detailModal").classList.add("open");
     }
@@ -309,6 +285,18 @@
       }
     });
 
+    async function loadCatalogue() {
+      try {
+        const res = await fetch("./videos.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("Failed to fetch videos.json");
+        const data = await res.json();
+        titles = Array.isArray(data) && data.length ? data : fallbackTitles;
+      } catch (err) {
+        titles = fallbackTitles;
+      }
+      renderTitles();
+    }
+
     searchInput.addEventListener("input", renderTitles);
 
     filters.addEventListener("click", event => {
@@ -334,10 +322,10 @@
       document.getElementById("movies").scrollIntoView({ behavior: "smooth" });
     });
     document.getElementById("aboutBtn").addEventListener("click", () => {
-      alert("Prashant Flix is your own streaming website project with connected sample video playback.");
+      alert("Prashant Flix loads titles from videos.json and supports direct playback and download.");
     });
 
-    renderTitles();
+    loadCatalogue();
   </script>
 </body>
 </html>
