@@ -1,9 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
-/* ==============================
-   PRASHANT FLIX PRO - MAIN THEME
-============================== */
+/* ===== ROOT ===== */
 
 :root {
   color-scheme: dark;
@@ -34,10 +32,7 @@ body {
   min-height: 100vh;
 }
 
-button,
-input,
-select,
-textarea {
+button, input, select, textarea {
   font: inherit;
 }
 
@@ -50,36 +45,32 @@ button {
   display: none !important;
 }
 
-/* ==============================
-   HEADER - DESKTOP
-============================== */
+/* ===== MAIN HEADER ===== */
 
 .topbar {
-  width: 100%;
   min-height: 72px;
   padding: 0 clamp(16px, 5vw, 72px);
   display: flex;
   align-items: center;
   gap: 30px;
-  background: rgba(9, 9, 13, .97);
+  background: rgba(9, 9, 13, .98);
   border-bottom: 1px solid #ffffff12;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 9999;
   isolation: isolate;
+  overflow: visible;
   backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
 }
 
 .wordmark {
-  flex-shrink: 0;
-  position: relative;
   background: none;
   border: 0;
+  color: white;
   font: 800 20px "Space Grotesk", sans-serif;
   letter-spacing: -1px;
   white-space: nowrap;
-  color: white;
+  flex-shrink: 0;
 }
 
 .wordmark b {
@@ -93,35 +84,37 @@ button {
   margin-left: 5px;
 }
 
+/* ===== NAVIGATION ===== */
+
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: center;
+  gap: 23px;
   flex: 1;
   min-width: 0;
 }
 
 .nav-link {
+  position: relative;
   background: none;
   border: 0;
-  color: #d4d4df;
+  color: #e8c477;
   font-family: "Space Grotesk", sans-serif;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: .3px;
   padding: 26px 0;
   white-space: nowrap;
-  position: relative;
-  transition: color .2s ease;
+  transition: color .2s;
 }
 
 .nav-link:hover {
-  color: var(--gold);
+  color: #ff8094;
 }
 
 .nav-link.active {
-  color: var(--gold);
-  font-weight: 700;
+  color: #ffffff;
 }
 
 .nav-link.active:after {
@@ -131,10 +124,12 @@ button {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--red), var(--gold));
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ed254666;
+  background: var(--red);
+  border-radius: 5px;
+  box-shadow: 0 0 12px #ed254666;
 }
+
+/* ===== HEADER ACTIONS ===== */
 
 .top-actions {
   display: flex;
@@ -144,7 +139,7 @@ button {
   margin-left: auto;
   flex-shrink: 0;
   position: relative;
-  z-index: 1100;
+  z-index: 10001;
 }
 
 .icon-button {
@@ -160,19 +155,21 @@ button {
   background: #17171f;
   border-radius: 9px;
   padding: 10px 14px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 #accountButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   visibility: visible;
   opacity: 1;
   white-space: nowrap;
-  flex-shrink: 0;
-  z-index: 1101;
+  background: var(--red);
+  color: white;
+  border: 1px solid #ff627b;
+  position: relative;
+  z-index: 10002;
 }
 
 .outline-button:hover,
@@ -180,9 +177,7 @@ button {
   border-color: #777;
 }
 
-/* ==============================
-   SEARCH
-============================== */
+/* ===== SEARCH ===== */
 
 .searchbar {
   padding: 14px clamp(16px, 5vw, 72px);
@@ -201,9 +196,7 @@ button {
   color: white;
 }
 
-/* ==============================
-   HERO SECTION
-============================== */
+/* ===== HERO ===== */
 
 .hero {
   min-height: 470px;
@@ -230,7 +223,8 @@ button {
   top: -80px;
   border: 1px solid #ffffff20;
   border-radius: 50%;
-  box-shadow: 0 0 0 35px #ffffff06, 0 0 0 80px #ffffff04;
+  box-shadow: 0 0 0 35px #ffffff06,
+              0 0 0 80px #ffffff04;
 }
 
 .hero-shade {
@@ -322,9 +316,7 @@ button {
   color: #ed25461b;
 }
 
-/* ==============================
-   CONTENT
-============================== */
+/* ===== CONTENT ===== */
 
 .content-wrap {
   padding: 26px clamp(16px, 5vw, 72px) 70px;
@@ -392,7 +384,8 @@ button {
   place-items: center;
   text-align: center;
   padding: 15px;
-  background: radial-gradient(circle at 70% 20%, #a53b5a55, transparent 45%), linear-gradient(145deg, #39202c, #14141c);
+  background: radial-gradient(circle at 70% 20%, #a53b5a55, transparent 45%),
+              linear-gradient(145deg, #39202c, #14141c);
 }
 
 .poster-placeholder span {
@@ -411,7 +404,7 @@ button {
   left: 9px;
   top: 9px;
   background: var(--red);
-  color: #fff;
+  color: white;
   border-radius: 5px;
   padding: 4px 7px;
   font-size: 9px;
@@ -469,9 +462,7 @@ button {
   margin-bottom: 18px;
 }
 
-/* ==============================
-   FOOTER
-============================== */
+/* ===== FOOTER ===== */
 
 .footer {
   border-top: 1px solid var(--line);
@@ -490,9 +481,7 @@ button {
   line-height: 1.6;
 }
 
-/* ==============================
-   AUTHENTICATION DIALOG
-============================== */
+/* ===== AUTH DIALOG ===== */
 
 .dialog {
   width: min(520px, calc(100% - 24px));
@@ -600,9 +589,7 @@ button {
   min-height: 16px;
 }
 
-/* ==============================
-   PLAYER
-============================== */
+/* ===== PLAYER ===== */
 
 .player-dialog {
   width: min(1000px, calc(100% - 18px));
@@ -632,9 +619,7 @@ button {
   margin: 5px 0;
 }
 
-/* ==============================
-   PROFILE
-============================== */
+/* ===== PROFILE ===== */
 
 .profile-actions {
   display: flex;
@@ -648,9 +633,7 @@ button {
   color: #ffb9c5;
 }
 
-/* ==============================
-   ADMIN
-============================== */
+/* ===== ADMIN ===== */
 
 .admin-dialog {
   width: min(850px, calc(100% - 18px));
@@ -721,31 +704,26 @@ button {
   color: #ff4b62;
 }
 
-/* ==============================
-   MOBILE HEADER - IMPORTANT FIX
-============================== */
+/* ===== MOBILE RESPONSIVE HEADER ===== */
 
 @media (max-width: 760px) {
 
   .topbar {
-    width: 100%;
-    height: auto;
-    min-height: 108px;
-    display: grid;
+    display: grid !important;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       "brand actions"
       "navigation navigation";
-    align-items: center;
-    column-gap: 8px;
-    row-gap: 0;
-    padding: 7px 12px 0;
+    min-height: 105px;
+    height: auto !important;
+    width: 100%;
+    padding: 9px 12px 5px !important;
+    gap: 5px 8px;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 9999;
     overflow: visible;
     isolation: isolate;
-    background: rgba(9, 9, 13, .98);
   }
 
   .topbar > .wordmark {
@@ -753,122 +731,110 @@ button {
     display: inline-flex;
     align-items: center;
     justify-self: start;
-    min-width: 0;
-    font-size: clamp(13px, 4vw, 17px);
+    font-size: 16px;
     letter-spacing: -.7px;
-    padding: 9px 0;
+    padding: 7px 0;
     position: relative;
-    z-index: 1002;
+    z-index: 10000;
   }
 
-  .topbar > .wordmark small {
+  .wordmark small {
     font-size: 8px;
-    letter-spacing: 1.5px;
     margin-left: 4px;
   }
 
-  .topbar > .top-actions {
+  .top-actions {
     grid-area: actions;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: flex-end;
     justify-self: end;
-    gap: 6px;
-    margin: 0;
-    min-width: 0;
+    gap: 7px;
+    margin: 0 !important;
     position: relative;
-    z-index: 1003;
+    z-index: 10001;
   }
 
   #searchToggle {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
     font-size: 25px;
-    min-width: 35px;
-    min-height: 38px;
-    padding: 4px;
+    padding: 5px;
   }
 
   #accountButton {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1004;
-    min-height: 38px;
-    max-width: 120px;
-    padding: 8px 10px;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: linear-gradient(135deg, #ed2546, #c91536);
+    color: #ffffff;
+    border: 1px solid #ff7186;
+    border-radius: 9px;
+    padding: 9px 11px !important;
     font-size: 12px;
-    line-height: 1.2;
+    font-weight: 800;
+    min-height: 36px;
     white-space: nowrap;
-    visibility: visible;
-    opacity: 1;
-    overflow: visible;
+    position: relative;
+    z-index: 10002;
   }
 
-  .topbar > .desktop-nav {
+  #installButton:not(.hidden) {
+    display: inline-flex;
+    padding: 8px;
+    font-size: 11px;
+  }
+
+  .desktop-nav {
     grid-area: navigation;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex !important;
+    position: static !important;
     width: 100%;
     min-width: 0;
-    min-height: 48px;
-    gap: 2px;
-    padding: 0 0 5px;
-    margin: 0;
-    position: relative;
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
     flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px;
+    padding: 6px 0 4px !important;
+    background: transparent !important;
+    border: 0 !important;
     overflow-x: auto;
-    overflow-y: hidden;
-    background: transparent;
-    border: 0;
-    z-index: 1001;
     scrollbar-width: none;
   }
 
-  .topbar > .desktop-nav::-webkit-scrollbar {
+  .desktop-nav::-webkit-scrollbar {
     display: none;
   }
 
-  .desktop-nav .nav-link {
+  .nav-link {
     flex: 0 0 auto;
     font-family: "Space Grotesk", sans-serif;
-    font-size: clamp(11px, 3.1vw, 13px);
-    font-weight: 700;
-    color: #e2e2eb;
-    letter-spacing: .1px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .2px;
+    color: #e8c477 !important;
+    padding: 11px 5px !important;
     white-space: nowrap;
-    padding: 12px 5px;
-    position: relative;
   }
 
-  .desktop-nav .nav-link:hover {
-    color: var(--gold);
+  .nav-link.active {
+    color: #ffffff !important;
   }
 
-  .desktop-nav .nav-link.active {
-    color: var(--gold);
-    font-weight: 700;
-  }
-
-  .desktop-nav .nav-link.active:after {
-    content: "";
-    position: absolute;
-    height: 3px;
+  .nav-link.active:after {
+    bottom: 2px;
     left: 15%;
     right: 15%;
-    bottom: 3px;
-    background: linear-gradient(90deg, var(--red), var(--gold));
-    border-radius: 10px;
-    box-shadow: 0 0 9px #ed254655;
+    height: 3px;
+    background: #ed2546;
+    border-radius: 5px;
+  }
+
+  .nav-link:hover {
+    color: #ff8094 !important;
   }
 
   .hero {
@@ -926,18 +892,16 @@ button {
   }
 }
 
-/* ==============================
-   TABLET
-============================== */
+/* ===== TABLET ===== */
 
 @media (min-width: 761px) and (max-width: 1000px) {
 
   .topbar {
-    gap: 16px;
+    gap: 15px;
   }
 
   .desktop-nav {
-    gap: 13px;
+    gap: 12px;
   }
 
   .nav-link {
@@ -949,6 +913,31 @@ button {
   }
 }
 
-/* ==============================
-   END - PRASHANT FLIX PRO
-============================== */
+/* ===== SMALL MOBILE ===== */
+
+@media (max-width: 360px) {
+
+  .topbar {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .topbar > .wordmark {
+    font-size: 14px;
+  }
+
+  .top-actions {
+    gap: 4px;
+  }
+
+  #accountButton {
+    padding: 7px 8px !important;
+    font-size: 11px;
+  }
+
+  .nav-link {
+    font-size: 11px;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+  }
+}
