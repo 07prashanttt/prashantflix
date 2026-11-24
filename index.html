@@ -1,128 +1,223 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#09090d">
-  <meta name="description" content="PRASHANT FLIX PRO — Movies, series and live entertainment.">
-  <title>PRASHANT FLIX PRO</title>
-  <link rel="manifest" href="./manifest.json">
-  <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css?v=3">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#141414">
+  <title>Prashant Flix</title>
+  <style>
+    :root { --red:#e50914; --bg:#141414; --panel:#202020; --muted:#b3b3b3; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:#fff; font-family:Arial,Helvetica,sans-serif; }
+    button, input { font:inherit; }
+    button { cursor:pointer; }
+    .topbar { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:28px; padding:16px 4.5%; background:rgba(12,12,12,.96); }
+    .brand { color:var(--red); font-size:clamp(21px,3vw,30px); font-weight:900; letter-spacing:-1.2px; white-space:nowrap; }
+    nav { display:flex; gap:20px; flex:1; }
+    nav a { color:#eee; text-decoration:none; font-size:14px; }
+    nav a:hover { color:#aaa; }
+    .search { width:min(240px,32vw); padding:10px 12px; color:white; background:#111; border:1px solid #777; border-radius:4px; outline:none; }
+    .search:focus { border-color:white; }
+    .hero { min-height:440px; display:flex; align-items:flex-end; padding:65px 5% 58px; position:relative; overflow:hidden; background:linear-gradient(90deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.68) 48%,rgba(0,0,0,.1) 100%),linear-gradient(0deg,#141414 0%,transparent 42%),url('https://images.unsplash.com/photo-1489599849927-2ee91eb5b5b2?auto=format&fit=crop&w=1800&q=85') center 38%/cover; }
+    .hero-content { max-width:590px; position:relative; }
+    .eyebrow { color:#ddd; font-size:12px; font-weight:bold; letter-spacing:3px; }
+    h1 { margin:12px 0; font-size:clamp(38px,6vw,66px); line-height:.98; }
+    .hero p { max-width:520px; color:#ddd; line-height:1.6; font-size:15px; }
+    .actions { display:flex; gap:12px; margin-top:22px; }
+    .btn { border:0; border-radius:4px; padding:12px 20px; font-weight:bold; }
+    .btn-primary { background:#fff; color:#111; }
+    .btn-primary:hover { background:#ddd; }
+    .btn-secondary { background:rgba(109,109,110,.75); color:white; }
+    .btn-secondary:hover { background:rgba(109,109,110,.5); }
+    main { padding:0 4.5% 55px; }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:18px 0 24px; }
+    .toolbar h2 { margin:0; font-size:22px; }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; }
+    .filter { color:#ddd; background:#292929; border:1px solid #444; padding:8px 13px; border-radius:20px; font-size:12px; }
+    .filter.active { background:var(--red); border-color:var(--red); color:white; }
+    .section { margin:26px 0 34px; }
+    .section h2 { font-size:21px; margin:0 0 14px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; }
+    .card { min-width:0; border-radius:5px; overflow:hidden; background:#242424; transition:transform .18s ease,box-shadow .18s ease; cursor:pointer; }
+    .card:hover { transform:scale(1.035); box-shadow:0 8px 24px #0009; }
+    .poster { width:100%; aspect-ratio:2/3; display:block; object-fit:cover; background:#333; }
+    .card-info { padding:10px; }
+    .card-title { font-weight:bold; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .meta { color:var(--muted); font-size:11px; margin-top:6px; }
+    .empty { color:var(--muted); padding:24px 0; }
+    footer { border-top:1px solid #333; padding:25px 5%; color:#888; font-size:12px; line-height:1.6; }
+    .modal { position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:18px; background:#000c; }
+    .modal.open { display:flex; }
+    .modal-box { width:min(650px,100%); background:#202020; border-radius:8px; overflow:hidden; box-shadow:0 18px 70px #000; }
+    .modal-banner { height:220px; background-size:cover; background-position:center; position:relative; }
+    .modal-banner:after { content:""; position:absolute; inset:0; background:linear-gradient(0deg,#202020,transparent 75%); }
+    .modal-body { padding:20px 24px 25px; }
+    .modal-body h2 { margin:0 0 8px; }
+    .modal-body p { color:#ccc; line-height:1.6; }
+    .close { float:right; border:0; color:white; background:#333; border-radius:50%; width:34px; height:34px; font-size:20px; }
+    .notice { color:#aaa; font-size:12px; margin-top:14px; }
+    @media(max-width:650px) {
+      .topbar { gap:12px; flex-wrap:wrap; padding:13px 4%; }
+      nav { order:3; width:100%; gap:16px; overflow:auto; }
+      nav a { white-space:nowrap; font-size:13px; }
+      .search { margin-left:auto; width:42vw; }
+      .hero { min-height:390px; padding:50px 5% 45px; }
+      main { padding-left:4%; padding-right:4%; }
+      .toolbar { align-items:flex-start; flex-direction:column; }
+      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    }
+  </style>
 </head>
 <body>
   <header class="topbar">
-    <button class="wordmark" data-page="home" aria-label="PRASHANT FLIX home">PRASHANT <b>FLIX</b><small>PRO</small></button>
-    <nav class="desktop-nav" aria-label="Main navigation">
-      <button data-page="home" class="nav-link active">Home</button>
-      <button data-page="movies" class="nav-link">Movies</button>
-      <button data-page="series" class="nav-link">Series</button>
-      <button data-page="live" class="nav-link">Live TV</button>
-      <button data-page="mylist" class="nav-link">My List</button>
+    <div class="brand">PRASHANT FLIX</div>
+    <nav aria-label="Main navigation">
+      <a href="#home">Home</a><a href="#movies">Movies</a><a href="#series">Web Series</a><a href="#my-list">My List</a>
     </nav>
-    <div class="top-actions">
-      <button id="searchToggle" class="icon-button" type="button" aria-label="Toggle search" aria-expanded="false">⌕</button>
-      <button id="accountButton" class="account-button" type="button">Sign in</button>
-      <button id="installButton" class="outline-button hidden" type="button">Install</button>
-    </div>
+    <input id="searchInput" class="search" type="search" placeholder="Search titles..." aria-label="Search titles">
   </header>
 
-  <div id="searchBar" class="searchbar hidden">
-    <input id="searchInput" type="search" placeholder="Search titles, genres..." autocomplete="off">
-    <button id="clearSearch" class="outline-button" type="button">Clear</button>
-  </div>
-
-  <main id="appMain">
-    <section id="hero" class="hero">
-      <div class="hero-shade"></div>
-      <div class="hero-copy">
-        <p class="eyebrow">YOUR ENTERTAINMENT UNIVERSE</p>
-        <h1>Stories worth<br><span>staying in for.</span></h1>
-        <p class="hero-description">Discover movies, series and live channels in one place.</p>
-        <div class="hero-actions">
-          <button id="heroExplore" class="primary-button" type="button">Explore now <span>→</span></button>
-          <button id="heroInfo" class="ghost-button" type="button">About PRASHANT FLIX</button>
-        </div>
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="eyebrow">PRASHANT FLIX ORIGINAL EXPERIENCE</div>
+      <h1>Stories worth<br>staying in for.</h1>
+      <p>Discover movies and series in one place. Explore the sample catalogue, search titles, and open each title for more information.</p>
+      <div class="actions">
+        <button class="btn btn-primary" id="exploreBtn">▶ Explore titles</button>
+        <button class="btn btn-secondary" id="aboutBtn">ⓘ About</button>
       </div>
-      <div class="hero-mark">PF<span>+</span></div>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-wrap">
-      <div id="notice" class="notice hidden" role="status"></div>
-      <div id="pageContent"></div>
+  <main id="movies">
+    <div class="toolbar">
+      <h2>Explore the catalogue</h2>
+      <div class="filters" id="filters">
+        <button class="filter active" data-filter="All">All</button>
+        <button class="filter" data-filter="Movie">Movies</button>
+        <button class="filter" data-filter="Series">Web Series</button>
+        <button class="filter" data-filter="Action">Action</button>
+        <button class="filter" data-filter="Drama">Drama</button>
+      </div>
+    </div>
+    <section class="section">
+      <h2 id="resultsHeading">Popular on Prashant Flix</h2>
+      <div class="grid" id="catalogue"></div>
+      <div class="empty" id="emptyMessage" hidden>No titles found. Try another search.</div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer-brand">PRASHANT <b>FLIX</b><small>PRO</small></div>
-    <p>Entertainment, in your hands.</p>
-    <p class="muted">Only stream content you own or are authorized to distribute.</p>
-    <span>© <span id="year"></span> PRASHANT FLIX</span>
+  <footer id="my-list">
+    <strong>PRASHANT FLIX</strong><br>
+    Demo website starter. The titles shown are sample catalogue entries, not a real streaming library.
+    Add only videos and artwork you own or are licensed to distribute.
   </footer>
 
-  <dialog id="authDialog" class="dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
-    <div class="dialog-inner">
-      <p class="eyebrow">WELCOME TO PRASHANT FLIX</p>
-      <h2 id="authHeading">Sign in to PRASHANT FLIX</h2>
-      <form id="authForm" class="stack-form">
-        <label>Email<input id="authEmail" type="email" autocomplete="email" required></label>
-        <label>Password<input id="authPassword" type="password" minlength="6" autocomplete="current-password" required></label>
-        <button id="authSubmit" class="primary-button" type="submit">Sign in</button>
-      </form>
-      <button id="googleSignIn" class="google-button" type="button"><span aria-hidden="true">G</span> Continue with Google</button>
-      <p class="switch-auth"><span id="authSwitchText">New here?</span> <button id="authSwitch" class="text-button" type="button">Create account</button></p>
-      <p id="authError" class="form-error" aria-live="polite"></p>
-    </div>
-  </dialog>
-
-  <dialog id="playerDialog" class="dialog player-dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
-    <div class="player-inner">
-      <video id="videoPlayer" controls playsinline preload="metadata"></video>
-      <div class="player-meta">
-        <div><p class="eyebrow" id="playerType">NOW PLAYING</p><h2 id="playerTitle">Title</h2><p id="playerDescription" class="muted"></p></div>
-        <button id="playerClose" class="outline-button" type="button">Close player</button>
-      </div>
-      <p id="playerError" class="form-error"></p>
-    </div>
-  </dialog>
-
-  <dialog id="profileDialog" class="dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
-    <div class="dialog-inner">
-      <p class="eyebrow">YOUR ACCOUNT</p><h2 id="profileName">Profile</h2>
-      <p id="profileEmail" class="muted"></p>
-      <div class="profile-actions">
-        <button id="openAdmin" class="outline-button hidden" type="button">Open Admin Studio</button>
-        <button id="signOut" class="danger-button" type="button">Sign out</button>
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-banner" id="modalBanner"></div>
+      <div class="modal-body">
+        <button class="close" id="closeModal" aria-label="Close">×</button>
+        <h2 id="modalTitle">Title</h2>
+        <div class="meta" id="modalMeta"></div>
+        <p id="modalDescription"></p>
+        <button class="btn btn-primary" id="watchButton">▶ Watch</button>
+        <div class="notice" id="watchNotice">Demo only: connect a video file or licensed streaming source to enable playback.</div>
       </div>
     </div>
-  </dialog>
+  </div>
 
-  <dialog id="adminDialog" class="dialog admin-dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
-    <div class="admin-inner">
-      <div class="admin-heading"><div><p class="eyebrow">CONTENT CONTROL</p><h2>Admin Studio</h2></div><span class="admin-pill">ADMIN</span></div>
-      <p class="muted">Add and manage content. Video URLs must point to media you are authorized to stream.</p>
-      <form id="contentForm" class="admin-form">
-        <label>Content type<select id="contentType"><option value="movie">Movie</option><option value="series">Web Series</option><option value="live">Live TV channel</option></select></label>
-        <label>Title<input id="contentTitle" required maxlength="100" placeholder="Title"></label>
-        <label>Genre<input id="contentGenre" maxlength="60" placeholder="Drama, Action..."></label>
-        <label>Description<textarea id="contentDescription" rows="3" maxlength="1000" placeholder="Short description"></textarea></label>
-        <label>Poster image<input id="contentPoster" type="file" accept="image/*"></label>
-        <label>Poster URL (optional)<input id="contentPosterUrl" type="url" placeholder="https://..."></label>
-        <label>Video / HLS URL<input id="contentVideo" type="url" required placeholder="https://your-authorized-stream.m3u8"></label>
-        <label>Release year<input id="contentYear" type="number" min="1900" max="2100" placeholder="2026"></label>
-        <button id="saveContent" class="primary-button" type="submit">Publish content</button>
-      </form>
-      <h3 class="admin-list-title">Published content</h3>
-      <div id="adminContentList" class="admin-content-list"></div>
-      <p id="adminMessage" class="form-error" aria-live="polite"></p>
-    </div>
-  </dialog>
+  <script>
+    // Demo catalogue: replace these sample entries with your own or licensed content.
+    const titles = [
+      { id:1, name:"Crimson Horizon", type:"Movie", genre:"Action", year:2025, rating:"U/A", image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80", description:"A daring journey begins when a mysterious signal changes everything." },
+      { id:2, name:"The Last Chapter", type:"Series", genre:"Drama", year:2025, rating:"U/A", image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80", description:"A close-knit group faces difficult choices and unexpected truths." },
+      { id:3, name:"Shadow Protocol", type:"Movie", genre:"Action", year:2024, rating:"U/A", image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80", description:"One secret mission. One chance to put things right." },
+      { id:4, name:"City of Echoes", type:"Series", genre:"Drama", year:2024, rating:"U", image:"https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80", description:"In a city full of stories, every street hides a mystery." },
+      { id:5, name:"Beyond the Summit", type:"Movie", genre:"Drama", year:2023, rating:"U", image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80", description:"An inspiring story about courage, friendship, and new beginnings." },
+      { id:6, name:"Night Shift", type:"Series", genre:"Action", year:2025, rating:"U/A", image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80", description:"When the city sleeps, a small team keeps watch." }
+    ];
 
-  <script type="module" src="./app.js?v=3"></script>
+    const catalogue = document.getElementById("catalogue");
+    const searchInput = document.getElementById("searchInput");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const filters = document.getElementById("filters");
+    let activeFilter = "All";
+
+    // Render cards based on the selected category and search text.
+    function renderTitles() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = titles.filter(item => {
+        const matchesText = `${item.name} ${item.genre} ${item.type}`.toLowerCase().includes(query);
+        const matchesFilter = activeFilter === "All" || item.type === activeFilter || item.genre === activeFilter;
+        return matchesText && matchesFilter;
+      });
+
+      catalogue.innerHTML = filtered.map(item => `
+        <article class="card" tabindex="0" role="button" aria-label="View ${item.name}" data-id="${item.id}">
+          <img class="poster" src="${item.image}" alt="${item.name} poster" loading="lazy">
+          <div class="card-info">
+            <div class="card-title">${item.name}</div>
+            <div class="meta">${item.year} · ${item.type} · ${item.genre}</div>
+          </div>
+        </article>
+      `).join("");
+
+      emptyMessage.hidden = filtered.length > 0;
+      catalogue.querySelectorAll(".card").forEach(card => {
+        card.addEventListener("click", () => openDetails(Number(card.dataset.id)));
+        card.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") openDetails(Number(card.dataset.id));
+        });
+      });
+    }
+
+    // Open the details popup for the selected title.
+    function openDetails(id) {
+      const item = titles.find(title => title.id === id);
+      if (!item) return;
+      document.getElementById("modalTitle").textContent = item.name;
+      document.getElementById("modalMeta").textContent = `${item.year} · ${item.type} · ${item.genre} · ${item.rating}`;
+      document.getElementById("modalDescription").textContent = item.description;
+      document.getElementById("modalBanner").style.backgroundImage = `url("${item.image}")`;
+      document.getElementById("detailModal").classList.add("open");
+    }
+
+    function closeDetails() {
+      document.getElementById("detailModal").classList.remove("open");
+    }
+
+    // Search updates the catalogue as the user types.
+    searchInput.addEventListener("input", renderTitles);
+
+    // Category buttons filter the catalogue.
+    filters.addEventListener("click", event => {
+      const button = event.target.closest("button[data-filter]");
+      if (!button) return;
+      activeFilter = button.dataset.filter;
+      filters.querySelectorAll(".filter").forEach(item => item.classList.toggle("active", item === button));
+      renderTitles();
+    });
+
+    document.getElementById("closeModal").addEventListener("click", closeDetails);
+    document.getElementById("detailModal").addEventListener("click", event => {
+      if (event.target.id === "detailModal") closeDetails();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeDetails();
+    });
+    document.getElementById("exploreBtn").addEventListener("click", () => {
+      document.getElementById("movies").scrollIntoView({ behavior:"smooth" });
+    });
+    document.getElementById("aboutBtn").addEventListener("click", () => {
+      alert("Prashant Flix is your own streaming website project. This first version is a front-end demo.");
+    });
+    document.getElementById("watchButton").addEventListener("click", () => {
+      alert("Video playback is not connected yet. Next, add a video file or a licensed streaming URL.");
+    });
+
+    // Show the sample catalogue when the page first loads.
+    renderTitles();
+  </script>
 </body>
 </html>
