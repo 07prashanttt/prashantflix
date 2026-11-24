@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    match /media/{mediaId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          "type","title","genre","description","posterUrl","posterPath",
+          "videoUrl","year","published","createdBy","createdAt"
+        ])
+        && request.resource.data.type in ["movie","series","live"]
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.videoUrl is string
+        && request.resource.data.videoUrl.matches('https://.*');
+      allow update: if isAdmin()
+        && request.resource.data.createdBy == resource.data.createdBy;
+      allow delete: if isAdmin();
+    }
+
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isAdmin();
+      allow create: if isSelf(uid)
+        && request.resource.data.role == "user";
+      // Users may update basic profile fields but cannot change their role.
+      allow update: if isSelf(uid)
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(["displayName","photoURL"]);
+      allow delete: if false;
+
+      match /watchlist/{mediaId} {
+        allow read, create, delete: if isSelf(uid);
+        allow update: if false;
+      }
+      match /progress/{mediaId} {
+        allow read, create, update, delete: if isSelf(uid);
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "PRASHANT FLIX PRO",
+  "short_name": "PRASHANT FLIX",
+  "description": "Movies, Web Series and Live TV",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#09090d",
+  "theme_color": "#09090d",
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}
+  ]
+}
