@@ -11,13 +11,18 @@
     body { margin:0; background:var(--bg); color:#fff; font-family:Arial,Helvetica,sans-serif; }
     button, input, a.btn { font:inherit; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
     button { cursor:pointer; }
-    .topbar { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:28px; padding:16px 4.5%; background:rgba(12,12,12,.96); }
+    .topbar { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:20px; padding:16px 4.5%; background:rgba(12,12,12,.96); flex-wrap:wrap; }
     .brand { color:var(--red); font-size:clamp(21px,3vw,30px); font-weight:900; letter-spacing:-1.2px; white-space:nowrap; }
-    nav { display:flex; gap:20px; flex:1; }
-    nav a { color:#eee; text-decoration:none; font-size:14px; }
+    nav { display:flex; gap:20px; flex:1; min-width:170px; }
+    nav a { color:#eee; text-decoration:none; font-size:14px; white-space:nowrap; }
     nav a:hover { color:#aaa; }
-    .search { width:min(240px,32vw); padding:10px 12px; color:white; background:#111; border:1px solid #777; border-radius:4px; outline:none; }
+    .search { width:min(220px,36vw); padding:10px 12px; color:white; background:#111; border:1px solid #777; border-radius:4px; outline:none; }
     .search:focus { border-color:white; }
+    .auth-box { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .user-pill { font-size:12px; color:#ddd; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .auth-btn { border:1px solid #555; background:#222; color:#fff; padding:8px 12px; border-radius:4px; font-size:12px; font-weight:bold; white-space:nowrap; }
+    .auth-btn.google { background:#fff; color:#111; border-color:#fff; }
+    .auth-btn.google:hover { background:#e5e5e5; }
     .hero { min-height:440px; display:flex; align-items:flex-end; padding:65px 5% 58px; position:relative; overflow:hidden; background:linear-gradient(90deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.68) 48%,rgba(0,0,0,.1) 100%),linear-gradient(0deg,#141414 0%,transparent 42%),url('https://images.unsplash.com/photo-1489599849927-2ee91eb5b5b2?auto=format&fit=crop&w=1800&q=85') center 38%/cover; }
     .hero-content { max-width:590px; position:relative; }
     .eyebrow { color:#ddd; font-size:12px; font-weight:bold; letter-spacing:3px; }
@@ -30,13 +35,15 @@
     .btn-secondary { background:rgba(109,109,110,.75); color:white; }
     .btn-secondary:hover { background:rgba(109,109,110,.5); }
     main { padding:0 4.5% 55px; }
-    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:18px 0 24px; }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:18px 0 24px; flex-wrap:wrap; }
     .toolbar h2 { margin:0; font-size:22px; }
     .filters { display:flex; gap:8px; flex-wrap:wrap; }
     .filter { color:#ddd; background:#292929; border:1px solid #444; padding:8px 13px; border-radius:20px; font-size:12px; }
     .filter.active { background:var(--red); border-color:var(--red); color:white; }
     .section { margin:26px 0 34px; }
-    .section h2 { font-size:21px; margin:0 0 14px; }
+    .section-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:0 0 14px; flex-wrap:wrap; }
+    .section h2 { font-size:21px; margin:0; }
+    .count-label { font-size:12px; color:var(--muted); }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; }
     .card { min-width:0; border-radius:5px; overflow:hidden; background:#242424; transition:transform .18s ease,box-shadow .18s ease; cursor:pointer; }
     .card:hover { transform:scale(1.035); box-shadow:0 8px 24px #0009; }
@@ -48,7 +55,7 @@
     footer { border-top:1px solid #333; padding:25px 5%; color:#888; font-size:12px; line-height:1.6; }
     .modal { position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:18px; background:#000c; }
     .modal.open { display:flex; }
-    .modal-box { width:min(720px,100%); max-height:92vh; overflow-y:auto; background:#202020; border-radius:8px; box-shadow:0 18px 70px #000; }
+    .modal-box { width:min(650px,100%); max-height:92vh; overflow-y:auto; background:#202020; border-radius:8px; box-shadow:0 18px 70px #000; }
     .modal-banner { height:220px; background-size:cover; background-position:center; position:relative; }
     .modal-banner:after { content:""; position:absolute; inset:0; background:linear-gradient(0deg,#202020,transparent 75%); }
     .player-wrap { display:none; background:#000; }
@@ -64,7 +71,7 @@
       .topbar { gap:12px; flex-wrap:wrap; padding:13px 4%; }
       nav { order:3; width:100%; gap:16px; overflow:auto; }
       nav a { white-space:nowrap; font-size:13px; }
-      .search { margin-left:auto; width:42vw; }
+      .search { width:42vw; }
       .hero { min-height:390px; padding:50px 5% 45px; }
       main { padding-left:4%; padding-right:4%; }
       .toolbar { align-items:flex-start; flex-direction:column; }
@@ -76,19 +83,21 @@
   <header class="topbar">
     <div class="brand">PRASHANT FLIX</div>
     <nav aria-label="Main navigation">
-      <a href="#home" data-nav-filter="All">Home</a>
-      <a href="#movies" data-nav-filter="Movie">Movies</a>
-      <a href="#movies" data-nav-filter="Series">Web Series</a>
-      <a href="#my-list">My List</a>
+      <a href="#home">Home</a><a href="#movies">Movies</a><a href="#movies">Web Series</a><a href="#my-list">My List</a>
     </nav>
     <input id="searchInput" class="search" type="search" placeholder="Search titles..." aria-label="Search titles">
+    <div class="auth-box" id="authBar">
+      <span class="user-pill" id="userLabel">Guest</span>
+      <button type="button" class="auth-btn google" id="googleLoginBtn">Sign in with Google</button>
+      <button type="button" class="auth-btn" id="logoutBtn" style="display:none;">Logout</button>
+    </div>
   </header>
 
   <section class="hero" id="home">
     <div class="hero-content">
       <div class="eyebrow">PRASHANT FLIX ORIGINAL EXPERIENCE</div>
       <h1>Stories worth<br>staying in for.</h1>
-      <p>Discover movies and series in one place. Search titles, stream directly in the modal, or download available videos.</p>
+      <p>Discover 120+ movies and series in one place. Search titles, stream directly in the modal, and download available videos.</p>
       <div class="actions">
         <button class="btn btn-primary" id="exploreBtn">▶ Explore titles</button>
         <button class="btn btn-secondary" id="aboutBtn">ⓘ About</button>
@@ -105,10 +114,16 @@
         <button class="filter" data-filter="Series">Web Series</button>
         <button class="filter" data-filter="Action">Action</button>
         <button class="filter" data-filter="Drama">Drama</button>
+        <button class="filter" data-filter="Sci-Fi">Sci-Fi</button>
+        <button class="filter" data-filter="Adventure">Adventure</button>
+        <button class="filter" data-filter="Auto">Auto</button>
       </div>
     </div>
     <section class="section">
-      <h2 id="resultsHeading">Popular on Prashant Flix</h2>
+      <div class="section-head">
+        <h2 id="resultsHeading">Popular on Prashant Flix</h2>
+        <span class="count-label" id="countLabel"></span>
+      </div>
       <div class="grid" id="catalogue"></div>
       <div class="empty" id="emptyMessage" hidden>No titles found. Try another search.</div>
     </section>
@@ -116,7 +131,8 @@
 
   <footer id="my-list">
     <strong>PRASHANT FLIX</strong><br>
-    Demo streaming & media catalogue starter. Add only videos and artwork you own or are licensed to distribute.
+    Demo website starter. The titles shown are sample catalogue entries, not a real streaming library.
+    Add only videos and artwork you own or are licensed to distribute.
   </footer>
 
   <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -140,35 +156,45 @@
   </div>
 
   <script>
-    const fallbackTitles = [
-      {
-        id: 1,
-        name: "Crimson Horizon",
-        type: "Movie",
-        genre: "Action",
-        year: 2025,
-        rating: "U/A",
-        image: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        description: "A daring journey begins when a mysterious signal changes everything."
-      },
-      {
-        id: 2,
-        name: "The Last Chapter",
-        type: "Series",
-        genre: "Drama",
-        year: 2025,
-        rating: "U/A",
-        image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        description: "A close-knit group faces difficult choices and unexpected truths."
-      }
+    const baseItems = [
+      { name:"Crimson Horizon", type:"Movie", genre:"Action", rating:"U/A", image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", description:"A daring journey begins when a mysterious signal changes everything." },
+      { name:"The Last Chapter", type:"Series", genre:"Drama", rating:"U/A", image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", description:"A close-knit group faces difficult choices and unexpected truths." },
+      { name:"Big Buck Bunny", type:"Movie", genre:"Adventure", rating:"U", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", description:"A gentle giant rabbit stands up against woodland bullies in a lively adventure." },
+      { name:"Elephant Dream", type:"Series", genre:"Sci-Fi", rating:"U/A", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Elephants_Dream_s5_both.jpg/800px-Elephants_Dream_s5_both.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", description:"Two explorers navigate a surreal mechanical world filled with shifting illusions." },
+      { name:"Sintel Odyssey", type:"Movie", genre:"Adventure", rating:"U/A", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", description:"A determined traveler sets out across frozen peaks searching for a lost companion." },
+      { name:"Tears of Steel", type:"Movie", genre:"Sci-Fi", rating:"U/A 13+", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", description:"Survivors in a futuristic city confront towering machines to protect humanity's future." },
+      { name:"For Bigger Fun", type:"Series", genre:"Drama", rating:"U", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", description:"Everyday moments turn into big laughs and spontaneous road memories." },
+      { name:"For Bigger Joy", type:"Movie", genre:"Drama", rating:"U", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoy.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoy.mp4", description:"An uplifting story about friendship, music, and finding joy on the open road." },
+      { name:"For Bigger Meltdowns", type:"Series", genre:"Action", rating:"U/A", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", description:"High-stakes challenges push a crew to their limits when everything goes sideways." },
+      { name:"Subaru Outback Run", type:"Movie", genre:"Auto", rating:"U", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/SubaruOutbackOnStreetAndDirt.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4", description:"From paved highways to rugged dirt trails, every route tests grip and stamina." },
+      { name:"Bullrun Rally", type:"Series", genre:"Auto", rating:"U/A", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/WeAreGoingOnBullrun.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4", description:"Engines roar across long stretches of asphalt in a high-speed endurance run." },
+      { name:"Grand Car Challenge", type:"Movie", genre:"Auto", rating:"U", image:"https://storage.googleapis.com/gtv-videos-bucket/sample/images/WhatCarCanYouGetForAGrand.jpg", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4", description:"A budget car showdown proves clever builds can surprise everyone on the road." }
     ];
 
-    let titles = [];
+    const editions = ["Director's Cut", "Extended Edition", "Special Reel", "4K Master", "Remastered", "Season Finale", "Chapter 3", "Origins", "Final Cut", "Studio Cut"];
+
+    const titles = Array.from({ length: 120 }, (_, idx) => {
+      const src = baseItems[idx % baseItems.length];
+      const ed = editions[Math.floor(idx / baseItems.length) % editions.length];
+      const quality = idx % 3 === 0 ? "4K" : idx % 3 === 1 ? "1080p" : "720p";
+      return {
+        id: idx + 1,
+        name: `${src.name} — ${ed} #${idx + 1}`,
+        type: src.type,
+        genre: src.genre,
+        quality,
+        year: 2018 + (idx % 9),
+        rating: src.rating,
+        image: src.image,
+        videoUrl: src.videoUrl,
+        description: `${src.description} (${quality} edition)`
+      };
+    });
+
     const catalogue = document.getElementById("catalogue");
     const searchInput = document.getElementById("searchInput");
     const emptyMessage = document.getElementById("emptyMessage");
+    const countLabel = document.getElementById("countLabel");
     const filters = document.getElementById("filters");
     const modalBanner = document.getElementById("modalBanner");
     const playerWrap = document.getElementById("playerWrap");
@@ -180,28 +206,22 @@
     let activeFilter = "All";
     let currentTitle = null;
 
-    function setActiveFilter(filterValue) {
-      activeFilter = filterValue;
-      filters.querySelectorAll(".filter").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.filter === filterValue);
-      });
-      renderTitles();
-    }
-
     function renderTitles() {
       const query = searchInput.value.trim().toLowerCase();
       const filtered = titles.filter(item => {
-        const matchesText = `${item.name} ${item.genre} ${item.type}`.toLowerCase().includes(query);
+        const matchesText = `${item.name} ${item.genre} ${item.type} ${item.quality || ""} ${item.year || ""}`.toLowerCase().includes(query);
         const matchesFilter = activeFilter === "All" || item.type === activeFilter || item.genre === activeFilter;
         return matchesText && matchesFilter;
       });
+
+      countLabel.textContent = `Showing ${filtered.length} of ${titles.length} titles`;
 
       catalogue.innerHTML = filtered.map(item => `
         <article class="card" tabindex="0" role="button" aria-label="View ${item.name}" data-id="${item.id}">
           <img class="poster" src="${item.image}" alt="${item.name} poster" loading="lazy">
           <div class="card-info">
             <div class="card-title">${item.name}</div>
-            <div class="meta">${item.year} · ${item.type} · ${item.genre}</div>
+            <div class="meta">${item.year} · ${item.type} · ${item.genre} · ${item.quality}</div>
           </div>
         </article>
       `).join("");
@@ -238,7 +258,7 @@
 
       stopAndResetPlayer();
       document.getElementById("modalTitle").textContent = item.name;
-      document.getElementById("modalMeta").textContent = `${item.year} · ${item.type} · ${item.genre} · ${item.rating}`;
+      document.getElementById("modalMeta").textContent = `${item.year} · ${item.type} · ${item.genre} · ${item.quality} · ${item.rating}`;
       document.getElementById("modalDescription").textContent = item.description;
       modalBanner.style.backgroundImage = `url("${item.image}")`;
 
@@ -248,7 +268,7 @@
         downloadButton.setAttribute("target", "_blank");
         downloadButton.style.pointerEvents = "auto";
         downloadButton.style.opacity = "1";
-        watchNotice.textContent = "Ready to stream or download.";
+        watchNotice.textContent = "Click Watch to play or Download to save the video file.";
       } else {
         downloadButton.href = "#";
         downloadButton.removeAttribute("download");
@@ -285,30 +305,14 @@
       }
     });
 
-    async function loadCatalogue() {
-      try {
-        const res = await fetch("./videos.json", { cache: "no-store" });
-        if (!res.ok) throw new Error("Failed to fetch videos.json");
-        const data = await res.json();
-        titles = Array.isArray(data) && data.length ? data : fallbackTitles;
-      } catch (err) {
-        titles = fallbackTitles;
-      }
-      renderTitles();
-    }
-
     searchInput.addEventListener("input", renderTitles);
 
     filters.addEventListener("click", event => {
       const button = event.target.closest("button[data-filter]");
       if (!button) return;
-      setActiveFilter(button.dataset.filter);
-    });
-
-    document.querySelectorAll("nav a[data-nav-filter]").forEach(link => {
-      link.addEventListener("click", () => {
-        setActiveFilter(link.dataset.navFilter);
-      });
+      activeFilter = button.dataset.filter;
+      filters.querySelectorAll(".filter").forEach(item => item.classList.toggle("active", item === button));
+      renderTitles();
     });
 
     document.getElementById("closeModal").addEventListener("click", closeDetails);
@@ -319,13 +323,75 @@
       if (event.key === "Escape") closeDetails();
     });
     document.getElementById("exploreBtn").addEventListener("click", () => {
-      document.getElementById("movies").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("movies").scrollIntoView({ behavior:"smooth" });
     });
     document.getElementById("aboutBtn").addEventListener("click", () => {
-      alert("Prashant Flix loads titles from videos.json and supports direct playback and download.");
+      alert("Prashant Flix is your own streaming website project with 120+ sample titles, search, modal playback, and download.");
     });
 
-    loadCatalogue();
+    renderTitles();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "prashantflix",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const googleLoginBtn = document.getElementById("googleLoginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const userLabel = document.getElementById("userLabel");
+
+    if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_")) {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      googleLoginBtn.addEventListener("click", async () => {
+        try {
+          await signInWithPopup(auth, provider);
+        } catch (err) {
+          alert("Google Sign-In error: " + err.message);
+        }
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+        } catch (err) {
+          alert("Logout error: " + err.message);
+        }
+      });
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          userLabel.textContent = user.displayName || user.email || "Signed In";
+          googleLoginBtn.style.display = "none";
+          logoutBtn.style.display = "inline-flex";
+        } else {
+          userLabel.textContent = "Guest";
+          googleLoginBtn.style.display = "inline-flex";
+          logoutBtn.style.display = "none";
+        }
+      });
+    } else {
+      googleLoginBtn.addEventListener("click", () => {
+        alert("firebaseConfig mein apni asli API key daal do—uske baad Google Sign-In kaam karega.");
+      });
+    }
   </script>
 </body>
 </html>
