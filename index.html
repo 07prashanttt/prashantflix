@@ -8,7 +8,7 @@
   <title>PRASHANT FLIX PRO</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=3">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script>
 </head>
 <body>
@@ -22,15 +22,15 @@
       <button data-page="mylist" class="nav-link">My List</button>
     </nav>
     <div class="top-actions">
-      <button id="searchToggle" class="icon-button" aria-label="Search">⌕</button>
-      <button id="accountButton" class="account-button">Sign in</button>
-      <button id="installButton" class="outline-button hidden">Install</button>
+      <button id="searchToggle" class="icon-button" type="button" aria-label="Toggle search" aria-expanded="false">⌕</button>
+      <button id="accountButton" class="account-button" type="button">Sign in</button>
+      <button id="installButton" class="outline-button hidden" type="button">Install</button>
     </div>
   </header>
 
   <div id="searchBar" class="searchbar hidden">
     <input id="searchInput" type="search" placeholder="Search titles, genres..." autocomplete="off">
-    <button id="clearSearch" class="outline-button">Clear</button>
+    <button id="clearSearch" class="outline-button" type="button">Clear</button>
   </div>
 
   <main id="appMain">
@@ -41,8 +41,8 @@
         <h1>Stories worth<br><span>staying in for.</span></h1>
         <p class="hero-description">Discover movies, series and live channels in one place.</p>
         <div class="hero-actions">
-          <button id="heroExplore" class="primary-button">Explore now <span>→</span></button>
-          <button id="heroInfo" class="ghost-button">About PRASHANT FLIX</button>
+          <button id="heroExplore" class="primary-button" type="button">Explore now <span>→</span></button>
+          <button id="heroInfo" class="ghost-button" type="button">About PRASHANT FLIX</button>
         </div>
       </div>
       <div class="hero-mark">PF<span>+</span></div>
@@ -55,58 +55,54 @@
   </main>
 
   <footer class="footer">
-    <div class="wordmark">PRASHANT <b>FLIX</b><small>PRO</small></div>
+    <div class="footer-brand">PRASHANT <b>FLIX</b><small>PRO</small></div>
     <p>Entertainment, in your hands.</p>
     <p class="muted">Only stream content you own or are authorized to distribute.</p>
     <span>© <span id="year"></span> PRASHANT FLIX</span>
   </footer>
 
-  <!-- Authentication dialog -->
   <dialog id="authDialog" class="dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" aria-label="Close">×</button></form>
+    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
     <div class="dialog-inner">
-      <p class="eyebrow">WELCOME BACK</p>
+      <p class="eyebrow">WELCOME TO PRASHANT FLIX</p>
       <h2 id="authHeading">Sign in to PRASHANT FLIX</h2>
       <form id="authForm" class="stack-form">
         <label>Email<input id="authEmail" type="email" autocomplete="email" required></label>
         <label>Password<input id="authPassword" type="password" minlength="6" autocomplete="current-password" required></label>
         <button id="authSubmit" class="primary-button" type="submit">Sign in</button>
       </form>
-      <button id="googleSignIn" class="google-button">Continue with Google</button>
-      <p class="switch-auth"><span id="authSwitchText">New here?</span> <button id="authSwitch" class="text-button">Create account</button></p>
+      <button id="googleSignIn" class="google-button" type="button"><span aria-hidden="true">G</span> Continue with Google</button>
+      <p class="switch-auth"><span id="authSwitchText">New here?</span> <button id="authSwitch" class="text-button" type="button">Create account</button></p>
       <p id="authError" class="form-error" aria-live="polite"></p>
     </div>
   </dialog>
 
-  <!-- Movie / episode / live player -->
   <dialog id="playerDialog" class="dialog player-dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" aria-label="Close">×</button></form>
+    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
     <div class="player-inner">
       <video id="videoPlayer" controls playsinline preload="metadata"></video>
       <div class="player-meta">
         <div><p class="eyebrow" id="playerType">NOW PLAYING</p><h2 id="playerTitle">Title</h2><p id="playerDescription" class="muted"></p></div>
-        <button id="playerClose" class="outline-button">Close player</button>
+        <button id="playerClose" class="outline-button" type="button">Close player</button>
       </div>
       <p id="playerError" class="form-error"></p>
     </div>
   </dialog>
 
-  <!-- Profile dialog -->
   <dialog id="profileDialog" class="dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" aria-label="Close">×</button></form>
+    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
     <div class="dialog-inner">
       <p class="eyebrow">YOUR ACCOUNT</p><h2 id="profileName">Profile</h2>
       <p id="profileEmail" class="muted"></p>
       <div class="profile-actions">
-        <button id="openAdmin" class="outline-button hidden">Open Admin Studio</button>
-        <button id="signOut" class="danger-button">Sign out</button>
+        <button id="openAdmin" class="outline-button hidden" type="button">Open Admin Studio</button>
+        <button id="signOut" class="danger-button" type="button">Sign out</button>
       </div>
     </div>
   </dialog>
 
-  <!-- Admin dashboard -->
   <dialog id="adminDialog" class="dialog admin-dialog">
-    <form method="dialog" class="dialog-close-row"><button class="close-button" aria-label="Close">×</button></form>
+    <form method="dialog" class="dialog-close-row"><button class="close-button" type="submit" aria-label="Close">×</button></form>
     <div class="admin-inner">
       <div class="admin-heading"><div><p class="eyebrow">CONTENT CONTROL</p><h2>Admin Studio</h2></div><span class="admin-pill">ADMIN</span></div>
       <p class="muted">Add and manage content. Video URLs must point to media you are authorized to stream.</p>
@@ -127,6 +123,6 @@
     </div>
   </dialog>
 
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js?v=3"></script>
 </body>
 </html>
