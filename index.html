@@ -156,6 +156,20 @@
   </div>
 
   <script>
+    const ramayanItem = {
+      id: 0,
+      name: "Ramayan",
+      type: "Movie",
+      genre: "Drama",
+      quality: "HD",
+      year: 2026,
+      rating: "U",
+      image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80",
+      // Note: playdrive.vip/e/... is an embed player URL, not a direct .mp4 file
+      videoUrl: "https://playdrive.vip/e/AQGrE48AAgDqcw?stream=hd",
+      description: "Epic mythological story of dharma, devotion, and courage."
+    };
+
     const baseItems = [
       { name:"Crimson Horizon", type:"Movie", genre:"Action", rating:"U/A", image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", description:"A daring journey begins when a mysterious signal changes everything." },
       { name:"The Last Chapter", type:"Series", genre:"Drama", rating:"U/A", image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80", videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", description:"A close-knit group faces difficult choices and unexpected truths." },
@@ -173,23 +187,26 @@
 
     const editions = ["Director's Cut", "Extended Edition", "Special Reel", "4K Master", "Remastered", "Season Finale", "Chapter 3", "Origins", "Final Cut", "Studio Cut"];
 
-    const titles = Array.from({ length: 120 }, (_, idx) => {
-      const src = baseItems[idx % baseItems.length];
-      const ed = editions[Math.floor(idx / baseItems.length) % editions.length];
-      const quality = idx % 3 === 0 ? "4K" : idx % 3 === 1 ? "1080p" : "720p";
-      return {
-        id: idx + 1,
-        name: `${src.name} — ${ed} #${idx + 1}`,
-        type: src.type,
-        genre: src.genre,
-        quality,
-        year: 2018 + (idx % 9),
-        rating: src.rating,
-        image: src.image,
-        videoUrl: src.videoUrl,
-        description: `${src.description} (${quality} edition)`
-      };
-    });
+    const titles = [
+      ramayanItem,
+      ...Array.from({ length: 120 }, (_, idx) => {
+        const src = baseItems[idx % baseItems.length];
+        const ed = editions[Math.floor(idx / baseItems.length) % editions.length];
+        const quality = idx % 3 === 0 ? "4K" : idx % 3 === 1 ? "1080p" : "720p";
+        return {
+          id: idx + 1,
+          name: `${src.name} — ${ed} #${idx + 1}`,
+          type: src.type,
+          genre: src.genre,
+          quality,
+          year: 2018 + (idx % 9),
+          rating: src.rating,
+          image: src.image,
+          videoUrl: src.videoUrl,
+          description: `${src.description} (${quality} edition)`
+        };
+      })
+    ];
 
     const catalogue = document.getElementById("catalogue");
     const searchInput = document.getElementById("searchInput");
@@ -205,6 +222,10 @@
 
     let activeFilter = "All";
     let currentTitle = null;
+
+    function isDirectVideoFile(url) {
+      return /\.(mp4|webm|ogg)(\?.*)?$/i.test(url || "");
+    }
 
     function renderTitles() {
       const query = searchInput.value.trim().toLowerCase();
@@ -268,7 +289,9 @@
         downloadButton.setAttribute("target", "_blank");
         downloadButton.style.pointerEvents = "auto";
         downloadButton.style.opacity = "1";
-        watchNotice.textContent = "Click Watch to play or Download to save the video file.";
+        watchNotice.textContent = isDirectVideoFile(item.videoUrl)
+          ? "Ready to stream or download."
+          : "Note: This link is an embed/player link, not a direct .mp4 file.";
       } else {
         downloadButton.href = "#";
         downloadButton.removeAttribute("download");
@@ -289,6 +312,12 @@
     watchButton.addEventListener("click", () => {
       if (!currentTitle || !currentTitle.videoUrl) {
         watchNotice.textContent = "No videoUrl found for this title.";
+        return;
+      }
+
+      if (!isDirectVideoFile(currentTitle.videoUrl)) {
+        window.open(currentTitle.videoUrl, "_blank", "noopener");
+        watchNotice.textContent = "Opened embed player link in a new tab (HTML5 <video> requires a direct .mp4 file).";
         return;
       }
 
@@ -326,7 +355,7 @@
       document.getElementById("movies").scrollIntoView({ behavior:"smooth" });
     });
     document.getElementById("aboutBtn").addEventListener("click", () => {
-      alert("Prashant Flix is your own streaming website project with 120+ sample titles, search, modal playback, and download.");
+      alert("Prashant Flix features Ramayan plus 120+ titles with live search, filters, playback, and download.");
     });
 
     renderTitles();
