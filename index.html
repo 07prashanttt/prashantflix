@@ -48,9 +48,12 @@
     footer { border-top:1px solid #333; padding:25px 5%; color:#888; font-size:12px; line-height:1.6; }
     .modal { position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:18px; background:#000c; }
     .modal.open { display:flex; }
-    .modal-box { width:min(650px,100%); background:#202020; border-radius:8px; overflow:hidden; box-shadow:0 18px 70px #000; }
+    .modal-box { width:min(720px,100%); max-height:92vh; overflow-y:auto; background:#202020; border-radius:8px; box-shadow:0 18px 70px #000; }
     .modal-banner { height:220px; background-size:cover; background-position:center; position:relative; }
     .modal-banner:after { content:""; position:absolute; inset:0; background:linear-gradient(0deg,#202020,transparent 75%); }
+    .player-wrap { display:none; background:#000; }
+    .player-wrap.active { display:block; }
+    .player-wrap video { width:100%; max-height:420px; display:block; background:#000; }
     .modal-body { padding:20px 24px 25px; }
     .modal-body h2 { margin:0 0 8px; }
     .modal-body p { color:#ccc; line-height:1.6; }
@@ -72,7 +75,10 @@
   <header class="topbar">
     <div class="brand">PRASHANT FLIX</div>
     <nav aria-label="Main navigation">
-      <a href="#home">Home</a><a href="#movies">Movies</a><a href="#series">Web Series</a><a href="#my-list">My List</a>
+      <a href="#home" data-nav-filter="All">Home</a>
+      <a href="#movies" data-nav-filter="Movie">Movies</a>
+      <a href="#movies" data-nav-filter="Series">Web Series</a>
+      <a href="#my-list">My List</a>
     </nav>
     <input id="searchInput" class="search" type="search" placeholder="Search titles..." aria-label="Search titles">
   </header>
@@ -116,35 +122,112 @@
   <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-box">
       <div class="modal-banner" id="modalBanner"></div>
+      <div class="player-wrap" id="playerWrap">
+        <video id="videoPlayer" controls playsinline preload="metadata"></video>
+      </div>
       <div class="modal-body">
         <button class="close" id="closeModal" aria-label="Close">×</button>
         <h2 id="modalTitle">Title</h2>
         <div class="meta" id="modalMeta"></div>
         <p id="modalDescription"></p>
         <button class="btn btn-primary" id="watchButton">▶ Watch</button>
-        <div class="notice" id="watchNotice">Demo only: connect a video file or licensed streaming source to enable playback.</div>
+        <div class="notice" id="watchNotice">Click Watch to play the connected video source.</div>
       </div>
     </div>
   </div>
 
   <script>
-    // Demo catalogue: replace these sample entries with your own or licensed content.
+    // Replace videoUrl values below with your own or licensed video stream URLs.
     const titles = [
-      { id:1, name:"Crimson Horizon", type:"Movie", genre:"Action", year:2025, rating:"U/A", image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80", description:"A daring journey begins when a mysterious signal changes everything." },
-      { id:2, name:"The Last Chapter", type:"Series", genre:"Drama", year:2025, rating:"U/A", image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80", description:"A close-knit group faces difficult choices and unexpected truths." },
-      { id:3, name:"Shadow Protocol", type:"Movie", genre:"Action", year:2024, rating:"U/A", image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80", description:"One secret mission. One chance to put things right." },
-      { id:4, name:"City of Echoes", type:"Series", genre:"Drama", year:2024, rating:"U", image:"https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80", description:"In a city full of stories, every street hides a mystery." },
-      { id:5, name:"Beyond the Summit", type:"Movie", genre:"Drama", year:2023, rating:"U", image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80", description:"An inspiring story about courage, friendship, and new beginnings." },
-      { id:6, name:"Night Shift", type:"Series", genre:"Action", year:2025, rating:"U/A", image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80", description:"When the city sleeps, a small team keeps watch." }
+      {
+        id: 1,
+        name: "Crimson Horizon",
+        type: "Movie",
+        genre: "Action",
+        year: 2025,
+        rating: "U/A",
+        image: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        description: "A daring journey begins when a mysterious signal changes everything."
+      },
+      {
+        id: 2,
+        name: "The Last Chapter",
+        type: "Series",
+        genre: "Drama",
+        year: 2025,
+        rating: "U/A",
+        image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        description: "A close-knit group faces difficult choices and unexpected truths."
+      },
+      {
+        id: 3,
+        name: "Shadow Protocol",
+        type: "Movie",
+        genre: "Action",
+        year: 2024,
+        rating: "U/A",
+        image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+        description: "One secret mission. One chance to put things right."
+      },
+      {
+        id: 4,
+        name: "City of Echoes",
+        type: "Series",
+        genre: "Drama",
+        year: 2024,
+        rating: "U",
+        image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoy.mp4",
+        description: "In a city full of stories, every street hides a mystery."
+      },
+      {
+        id: 5,
+        name: "Beyond the Summit",
+        type: "Movie",
+        genre: "Drama",
+        year: 2023,
+        rating: "U",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+        description: "An inspiring story about courage, friendship, and new beginnings."
+      },
+      {
+        id: 6,
+        name: "Night Shift",
+        type: "Series",
+        genre: "Action",
+        year: 2025,
+        rating: "U/A",
+        image: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        description: "When the city sleeps, a small team keeps watch."
+      }
     ];
 
     const catalogue = document.getElementById("catalogue");
     const searchInput = document.getElementById("searchInput");
     const emptyMessage = document.getElementById("emptyMessage");
     const filters = document.getElementById("filters");
-    let activeFilter = "All";
+    const modalBanner = document.getElementById("modalBanner");
+    const playerWrap = document.getElementById("playerWrap");
+    const videoPlayer = document.getElementById("videoPlayer");
+    const watchButton = document.getElementById("watchButton");
+    const watchNotice = document.getElementById("watchNotice");
 
-    // Render cards based on the selected category and search text.
+    let activeFilter = "All";
+    let currentTitle = null;
+
+    function setActiveFilter(filterValue) {
+      activeFilter = filterValue;
+      filters.querySelectorAll(".filter").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === filterValue);
+      });
+      renderTitles();
+    }
+
     function renderTitles() {
       const query = searchInput.value.trim().toLowerCase();
       const filtered = titles.filter(item => {
@@ -167,36 +250,77 @@
       catalogue.querySelectorAll(".card").forEach(card => {
         card.addEventListener("click", () => openDetails(Number(card.dataset.id)));
         card.addEventListener("keydown", event => {
-          if (event.key === "Enter" || event.key === " ") openDetails(Number(card.dataset.id));
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openDetails(Number(card.dataset.id));
+          }
         });
       });
     }
 
-    // Open the details popup for the selected title.
+    function stopAndResetPlayer() {
+      videoPlayer.pause();
+      videoPlayer.removeAttribute("src");
+      videoPlayer.load();
+      playerWrap.classList.remove("active");
+      modalBanner.style.display = "block";
+      watchButton.textContent = "▶ Watch";
+    }
+
     function openDetails(id) {
       const item = titles.find(title => title.id === id);
       if (!item) return;
+      currentTitle = item;
+
+      stopAndResetPlayer();
       document.getElementById("modalTitle").textContent = item.name;
       document.getElementById("modalMeta").textContent = `${item.year} · ${item.type} · ${item.genre} · ${item.rating}`;
       document.getElementById("modalDescription").textContent = item.description;
-      document.getElementById("modalBanner").style.backgroundImage = `url("${item.image}")`;
+      modalBanner.style.backgroundImage = `url("${item.image}")`;
+      watchNotice.textContent = item.videoUrl
+        ? "Ready to play connected video source."
+        : "No videoUrl connected for this title yet.";
+
       document.getElementById("detailModal").classList.add("open");
     }
 
     function closeDetails() {
+      stopAndResetPlayer();
+      currentTitle = null;
       document.getElementById("detailModal").classList.remove("open");
     }
 
-    // Search updates the catalogue as the user types.
+    watchButton.addEventListener("click", () => {
+      if (!currentTitle || !currentTitle.videoUrl) {
+        watchNotice.textContent = "No videoUrl found for this title.";
+        return;
+      }
+
+      if (!playerWrap.classList.contains("active")) {
+        modalBanner.style.display = "none";
+        playerWrap.classList.add("active");
+        videoPlayer.src = currentTitle.videoUrl;
+        videoPlayer.play().catch(() => {
+          watchNotice.textContent = "Use the player controls above to start playback.";
+        });
+        watchButton.textContent = "⏹ Stop Video";
+      } else {
+        stopAndResetPlayer();
+      }
+    });
+
     searchInput.addEventListener("input", renderTitles);
 
-    // Category buttons filter the catalogue.
     filters.addEventListener("click", event => {
       const button = event.target.closest("button[data-filter]");
       if (!button) return;
-      activeFilter = button.dataset.filter;
-      filters.querySelectorAll(".filter").forEach(item => item.classList.toggle("active", item === button));
-      renderTitles();
+      setActiveFilter(button.dataset.filter);
+    });
+
+    document.querySelectorAll("nav a[data-nav-filter]").forEach(link => {
+      link.addEventListener("click", () => {
+        setActiveFilter(link.dataset.navFilter);
+      });
     });
 
     document.getElementById("closeModal").addEventListener("click", closeDetails);
@@ -207,16 +331,12 @@
       if (event.key === "Escape") closeDetails();
     });
     document.getElementById("exploreBtn").addEventListener("click", () => {
-      document.getElementById("movies").scrollIntoView({ behavior:"smooth" });
+      document.getElementById("movies").scrollIntoView({ behavior: "smooth" });
     });
     document.getElementById("aboutBtn").addEventListener("click", () => {
-      alert("Prashant Flix is your own streaming website project. This first version is a front-end demo.");
-    });
-    document.getElementById("watchButton").addEventListener("click", () => {
-      alert("Video playback is not connected yet. Next, add a video file or a licensed streaming URL.");
+      alert("Prashant Flix is your own streaming website project with connected sample video playback.");
     });
 
-    // Show the sample catalogue when the page first loads.
     renderTitles();
   </script>
 </body>
