@@ -72,3 +72,106 @@
 }
 
 /* ===== END HEADER FIX ===== */
+
+/* ===== PRASHANT FLIX PRO MOBILE HEADER FINAL FIX ===== */
+
+@media (max-width: 760px) {
+
+  .topbar {
+    height: auto;
+    min-height: 105px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    padding: 8px 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow: visible;
+    isolation: isolate;
+  }
+
+  .wordmark {
+    order: 1;
+    display: inline-flex;
+    align-items: center;
+    font-size: 15px;
+    letter-spacing: -0.7px;
+    padding: 8px 0;
+    position: relative;
+    z-index: 102;
+  }
+
+  .wordmark small {
+    font-size: 8px;
+    margin-left: 4px;
+  }
+
+  .top-actions {
+    order: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    position: relative;
+    z-index: 110;
+  }
+
+  #searchToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    padding: 5px;
+  }
+
+  #accountButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 111;
+    visibility: visible;
+    opacity: 1;
+    white-space: nowrap;
+    padding: 8px 11px;
+    font-size: 12px;
+    min-height: 36px;
+  }
+
+  .desktop-nav {
+    order: 3;
+    position: static;
+    display: flex;
+    flex: 0 0 100%;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 0 8px;
+    background: transparent;
+    border: 0;
+    overflow-x: auto;
+  }
+
+  .nav-link {
+    flex: 0 0 auto;
+    font-size: 12px;
+    padding: 10px 5px;
+    white-space: nowrap;
+  }
+
+  .nav-link.active:after {
+    bottom: 3px;
+    left: 15%;
+    right: 15%;
+  }
+
+  #installButton:not(.hidden) {
+    display: inline-flex;
+  }
+}
+
+/* ===== END MOBILE HEADER FIX ===== */
