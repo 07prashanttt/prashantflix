@@ -941,3 +941,71 @@ button {
     padding-right: 3px !important;
   }
 }
+
+/* PRASHANT FLIX PRO - MOBILE HEADER FIX */
+@media (max-width: 768px) {
+
+  .topbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "brand actions"
+      "nav nav" !important;
+    align-items: center !important;
+    gap: 14px 8px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 14px 16px 10px !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  .wordmark {
+    grid-area: brand !important;
+    display: flex !important;
+    visibility: visible !important;
+    position: static !important;
+    min-width: 0 !important;
+  }
+
+  .top-actions {
+    grid-area: actions !important;
+    display: flex !important;
+    visibility: visible !important;
+    position: static !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+  }
+
+  .account-button,
+  #accountButton,
+  #searchToggle,
+  #installButton {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10000 !important;
+  }
+
+  .desktop-nav {
+    grid-area: nav !important;
+    display: flex !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    justify-content: space-between !important;
+    gap: 20px !important;
+    padding: 8px 0 0 !important;
+  }
+}
